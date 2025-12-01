@@ -136,3 +136,28 @@ main { margin-top: 1rem }
   font-size: 0.9rem;
 }
 
+/* edit mode layout: keep inputs and action buttons on one line and match sizes */
+.expense-item .right .edit {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.expense-item .edit .row-actions {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+.expense-item .edit .row-actions button,
+.expense-item .actions button {
+  margin-left: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+}
+
+/* compact widths for edit inputs to keep single-line layout on most screens */
+.expense-item .edit input {
+  width: 110px;
+  max-width: 30vw;
+}
+
