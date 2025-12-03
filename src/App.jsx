@@ -37,6 +37,20 @@ function App() {
     localStorage.setItem(LS_EXPENSES, JSON.stringify(expenses))
   }, [expenses])
 
+   const callAPI = async () => {
+    try {
+      const response = await fetch('/api/hello');
+      const data = await response.json();
+      console.log('API Response:', data);
+    } catch (error) {
+      console.error('Error calling API:', error);
+    }
+  }
+
+  useEffect(() => {
+    callAPI();
+  }, [])
+
   const totalSpent = useMemo(() => expenses.reduce((s, e) => s + Number(e.amount || 0), 0), [expenses])
   const remaining = useMemo(() => Number(budget) - totalSpent, [budget, totalSpent])
 
