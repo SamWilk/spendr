@@ -1,4 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { Box, Typography, Paper, List, ListItem, TextField, Button, IconButton, Chip } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
+import SaveIcon from '@mui/icons-material/Save'
+import CancelIcon from '@mui/icons-material/Cancel'
 
 function Item({ item, onUpdate, onDelete }) {
   const [editing, setEditing] = useState(false)
@@ -13,48 +18,56 @@ function Item({ item, onUpdate, onDelete }) {
     setEditing(false)
   }
 
+  if (editing) {
+    return (
+      <ListItem sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', py: 2, borderBottom: 1, borderColor: 'divider' }}>
+        <TextField size="small" value={title} onChange={(e) => setTitle(e.target.value)} label="Title" sx={{ flex: '1 1 150px' }} />
+        <TextField size="small" type="number" inputProps={{ step: '0.01' }} value={amount} onChange={(e) => setAmount(e.target.value)} label="Amount" sx={{ flex: '0 1 120px' }} />
+        <TextField size="small" value={note} onChange={(e) => setNote(e.target.value)} label="Note" sx={{ flex: '1 1 150px' }} />
+        <Box sx={{ display: 'flex', gap: 0.5 }}>
+          <IconButton color="primary" onClick={save} size="small"><SaveIcon fontSize="small" /></IconButton>
+          <IconButton onClick={() => setEditing(false)} size="small"><CancelIcon fontSize="small" /></IconButton>
+        </Box>
+      </ListItem>
+    )
+  }
+
   return (
-    <li className="expense-item">
-      <div className="left">
-        <div className="title">{item.title}</div>
-        <div className="note">{item.note}</div>
-      </div>
-      <div className="right">
-        {editing ? (
-          <div className="edit">
-            <input value={title} onChange={(e) => setTitle(e.target.value)} />
-            <input type="number" step="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} />
-            <input value={note} onChange={(e) => setNote(e.target.value)} />
-            <div className="row-actions">
-              <button onClick={save}>Save</button>
-              <button onClick={() => setEditing(false)}>Cancel</button>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="amount">${Number(item.amount).toFixed(2)}</div>
-            <div className="actions">
-              <button onClick={() => setEditing(true)}>Edit</button>
-              <button onClick={() => onDelete(item.id)}>Delete</button>
-            </div>
-          </>
-        )}
-      </div>
-    </li>
+    <ListItem sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 2, borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography variant="body1" fontWeight={600}>{item.title}</Typography>
+        {item.note && <Typography variant="body2" color="text.secondary" noWrap>{item.note}</Typography>}
+      </Box>
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Chip label={`$${Number(item.amount).toFixed(2)}`} color="primary" />
+        <IconButton size="small" onClick={() => setEditing(true)}><EditIcon fontSize="small" /></IconButton>
+        <IconButton size="small" color="error" onClick={() => onDelete(item.id)}><DeleteIcon fontSize="small" /></IconButton>
+      </Box>
+    </ListItem>
   )
 }
 
 export default function ExpenseList({ items = [], onUpdate, onDelete }) {
-  if (!items.length) return <p className="muted">No expenses yet — add one above.</p>
+  if (!items.length) {
+    return (
+      <Paper elevation={2} sx={{ p: 3 }}>
+        <Typography variant="body1" color="text.secondary" align="center">
+          No expenses yet — add one above.
+        </Typography>
+      </Paper>
+    )
+  }
 
   return (
-    <section className="expense-list">
-      <h2>Expenses</h2>
-      <ul>
+    <Paper elevation={2} sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>
+        Expenses
+      </Typography>
+      <List sx={{ p: 0 }}>
         {items.map((it) => (
           <Item key={it.id} item={it} onUpdate={onUpdate} onDelete={onDelete} />
         ))}
-      </ul>
-    </section>
+      </List>
+    </Paper>
   )
 }

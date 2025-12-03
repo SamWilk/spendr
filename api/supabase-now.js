@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return res.status(405).send('Method Not Allowed')
   }
 
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || SUPABASE_URL.includes('your-project') || SUPABASE_SERVICE_ROLE_KEY.includes('service-role-key')) {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(500).json({ error: 'Supabase not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY env vars.' })
   }
 

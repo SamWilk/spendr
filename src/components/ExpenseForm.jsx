@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import { Box, TextField, Button, Typography, Paper } from '@mui/material'
 
 export default function ExpenseForm({ onSubmit }) {
   const [title, setTitle] = useState('')
@@ -16,33 +17,41 @@ export default function ExpenseForm({ onSubmit }) {
   }
 
   return (
-    <form className="expense-form" onSubmit={submit}>
-      <h2>Add expense</h2>
-      <div className="grid">
-        <input
-          aria-label="expense title"
-          placeholder="Title (e.g., Groceries)"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          aria-label="expense amount"
-          placeholder="Amount (USD)"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          type="number"
-          step="0.01"
-        />
-        <input
-          aria-label="optional note"
-          placeholder="Note (optional)"
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-        />
-      </div>
-      <div className="actions">
-        <button type="submit">Add</button>
-      </div>
-    </form>
+    <Paper elevation={2} sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>
+        Add expense
+      </Typography>
+      <Box component="form" onSubmit={submit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <TextField
+            label="Title"
+            placeholder="e.g., Groceries"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            sx={{ flex: '1 1 200px' }}
+            required
+          />
+          <TextField
+            label="Amount (USD)"
+            type="number"
+            inputProps={{ step: '0.01' }}
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            sx={{ flex: '1 1 150px' }}
+            required
+          />
+          <TextField
+            label="Note (optional)"
+            placeholder="Optional note"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            sx={{ flex: '1 1 200px' }}
+          />
+        </Box>
+        <Button type="submit" variant="contained" size="large">
+          Add Expense
+        </Button>
+      </Box>
+    </Paper>
   )
 }
