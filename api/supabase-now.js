@@ -19,14 +19,15 @@ export default async function handler(req, res) {
 
   try {
 
-    const { data, error } = await supabase
-      .from('TestData')
-      .select('*')
+    let { data: TestData, error } = await supabase
+  .from('TestData')
+  .select('*')
+
     if (error) {
       return res.status(200).json({ now: new Date().toISOString(), note: 'RPC `now` not found; returning server time as fallback', details: error.message })
     }
 
-    return res.status(200).json({ now: data })
+    return res.status(200).json({ now: TestData })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Query failed', details: String(err) })
