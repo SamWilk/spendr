@@ -39,7 +39,7 @@ function App() {
 
    const callAPI = async () => {
     try {
-      const response = await fetch('/api/hello');
+      const response = await fetch('/api/supabase-now');
       const data = await response.json();
       console.log('API Response:', data);
     } catch (error) {
