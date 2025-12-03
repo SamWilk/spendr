@@ -19,12 +19,14 @@ export default async function handler(req, res) {
 
   try {
 
-    const sqlRes = await supabase.rpc('now')
-    if (sqlRes.error) {
-      return res.status(200).json({ now: new Date().toISOString(), note: 'RPC `now` not found; returning server time as fallback', details: sqlRes.error.message })
+    const { data, error } = await supabase
+      .from('TestData')
+      .select()
+    if (error) {
+      return res.status(200).json({ now: new Date().toISOString(), note: 'RPC `now` not found; returning server time as fallback', details: error.message })
     }
 
-    return res.status(200).json({ now: sqlRes.data })
+    return res.status(200).json({ now: data })
   } catch (err) {
     console.error(err)
     return res.status(500).json({ error: 'Query failed', details: String(err) })
