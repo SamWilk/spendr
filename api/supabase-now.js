@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 
     const { data, error } = await supabase
       .from('TestData')
-      .select()
+      .select('*')
     if (error) {
       return res.status(200).json({ now: new Date().toISOString(), note: 'RPC `now` not found; returning server time as fallback', details: error.message })
     }
