@@ -8,7 +8,7 @@ export default function Login() {
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     setError('')
 
@@ -16,15 +16,22 @@ export default function Login() {
       setError('Email and password are required')
       return
     }
-
-    // Placeholder login logic — replace with real Supabase auth
-    if (email === 'demo@spendr.app' && password === 'demo') {
-      // Successful login
-      localStorage.setItem('spendr_logged_in', 'true')
-      navigate('/')
-    } else {
-      setError('Invalid email or password')
-    }
+      try {
+        const thing = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        })
+        const data = await thing.json()
+        console.log('Supabase-login API response:', data)
+        localStorage.setItem('spendr_logged_in', 'true')
+        navigate('/')
+      } catch (error) {
+        console.error(error)
+        setError('Invalid email or password')
+      }
   }
 
   return (
@@ -39,7 +46,7 @@ export default function Login() {
       </Box>
 
       <Paper elevation={3} sx={{ p: 4 }}>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box component="form" onSubmit={ handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {error && <Alert severity="error">{error}</Alert>}
           
           <TextField
