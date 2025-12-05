@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Container, Box, TextField, Button, Typography, Alert, Paper } from '@mui/material'
+import { Container, Box, TextField, Button, Typography, Alert, Paper, Link } from '@mui/material'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -24,13 +24,17 @@ export default function Login() {
           },
           body: JSON.stringify({ email, password })
         })
-        const data = await thing.json()
-        console.log('Supabase-login API response:', data)
-        localStorage.setItem('spendr_logged_in', 'true')
-        navigate('/')
+        if(thing.status !== 200) {
+            setError('Invalid email or password')
+        }else{
+            const data = await thing.json()
+            console.log('Supabase-login API response:', data)
+            localStorage.setItem('spendr_logged_in', 'true')
+            navigate('/')
+        }
+
       } catch (error) {
         console.error(error)
-        setError('Invalid email or password')
       }
   }
 
@@ -74,6 +78,13 @@ export default function Login() {
           <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 1 }}>
             Log in
           </Button>
+
+          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+            Don't have an account?{' '}
+            <Link href="/signup" underline="hover" sx={{ cursor: 'pointer' }}>
+              Sign up
+            </Link>
+          </Typography>
 
         </Box>
       </Paper>

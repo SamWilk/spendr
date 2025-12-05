@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       email: req.body.email,
       password: req.body.password
     });
-
+    console.log(data, error)
     if (error) {
       return res.status(401).json({ now: new Date().toISOString(), note: '`Sign in` failed; returning server time as fallback', details: error.message })
     }
